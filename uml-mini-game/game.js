@@ -285,7 +285,7 @@ const QUESTIONS = {
         { q: '¿Cuál es una característica clave de las encuestas?', choices: ['No deben tener fecha límite', 'Solo pueden tener preguntas abiertas.', 'Son más lentas que entrevistar a cada usuario','Deben enfocarse en los objetivos de negocio'], a: 3 }
     ],
     medium: [
-        { q: '¿Qué regla es importante en la tormenta de ideas?', choices: ['Evaluar ideas desde el inicio', 'No permitir críticas a las ideas durante su generación.', 'Minificación','Limitar la cantidad de ideas aceptadas.'], a: 1 },
+        { q: '¿Qué regla es importante en la tormenta de ideas?', choices: ['Evaluar ideas desde el inicio', 'No permitir críticas a las ideas durante su generación.', 'descartar rápido','Limitar la cantidad de ideas aceptadas.'], a: 1 },
         { q: '¿Quién debería escribir una historia de usuario?', choices: ['Solamente el analista de sistemas', 'El equipo de marketing', 'El cliente o interesado, con apoyo del facilitador','El facilitador sin intervención del cliente'], a: 2 }
     ],
     hard: [
