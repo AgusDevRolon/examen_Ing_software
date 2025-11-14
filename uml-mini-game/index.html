@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐛 Debug Runner - Endless Runner Educativo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- PANTALLA DE MENÚ PRINCIPAL -->
+    <div id="menuScreen" class="screen active">
+        <div class="container d-flex justify-content-center align-items-center vh-100">
+            <div class="text-center">
+                <h1 class="display-3 mb-4 game-title">🐛 Debug Runner</h1>
+                <p class="lead mb-3">
+                    Un juego educativo para aprender a identificar y corregir errores.
+                </p>
+                
+                <div class="instructions mb-5 p-4 bg-light rounded">
+                    <h3>¿Cómo jugar?</h3>
+                    <p class="mb-3">
+                        <strong>El personaje corre automáticamente.</strong> Usa el botón para:
+                    </p>
+                    <ul class="list-unstyled text-start" style="max-width: 400px; margin: 0 auto;">
+                        <li class="mb-2">
+                            <strong>🖱️ Tap (1 toque):</strong> Salta sobre los bugs
+                        </li>
+                        <li class="mb-2">
+                            <strong>⏱️ Hold (mantener):</strong> Agáchate bajo los bugs
+                        </li>
+                        <li class="mb-2">
+                            <strong>⚡ Double-tap (doble toque):</strong> Golpea y corrige bugs
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bug-types mb-5 p-4 bg-light rounded">
+                    <h4>Tipos de Bugs</h4>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <p class="bug-icon">🔴</p>
+                            <p><strong>Null Error</strong><br><small>Salta</small></p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <p class="bug-icon">🟠</p>
+                            <p><strong>Overflow</strong><br><small>Agáchate</small></p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <p class="bug-icon">🟡</p>
+                            <p><strong>Syntax Error</strong><br><small>Golpea</small></p>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="startGameBtn" class="btn btn-primary btn-lg" aria-label="Iniciar juego">
+                    🎮 Iniciar Juego
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE JUEGO -->
+    <div id="gameScreen" class="screen">
+        <div class="game-container">
+            <!-- INTERFAZ DE USUARIO -->
+            <div class="game-ui">
+                <div class="ui-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Vidas:</span>
+                        <span class="stat-value" id="livesDisplay">❤️ 3</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Distancia:</span>
+                        <span class="stat-value" id="distanceDisplay">📏 0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Puntuación:</span>
+                        <span class="stat-value" id="scoreDisplay">⭐ 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ÁREA DE JUEGO -->
+            <div class="game-area" id="gameArea">
+                <!-- Fondo decorativo -->
+                <div class="game-background"></div>
+
+                <!-- Jugador -->
+                <div class="runner-container">
+                    <div class="runner" id="player" role="img" aria-label="Personaje corriendo">
+                        <div class="runner-head">🤖</div>
+                        <div class="runner-body"></div>
+                        <div class="runner-legs">
+                            <div class="leg leg-left"></div>
+                            <div class="leg leg-right"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenedor de bugs -->
+                <div id="bugsContainer"></div>
+
+                <!-- Preguntas al chocar -->
+                <div id="questionModal" class="question-modal" aria-hidden="true">
+                    <div class="question-content">
+                        <h3 id="questionTitle">Pregunta</h3>
+                        <p id="questionText">¿Pregunta aquí?</p>
+                        <div id="choicesContainer" class="choices-container"></div>
+                    </div>
+                </div>
+
+                <!-- Controlador -->
+                <div class="controls-container">
+                    <div class="instructions-mobile">
+                        <small>
+                            <strong>TAP:</strong> Salta | 
+                            <strong>HOLD:</strong> Agáchate | 
+                            <strong>DOUBLE-TAP:</strong> Golpea
+                        </small>
+                    </div>
+
+                    <button id="controlBtn" class="control-button" 
+                            aria-label="Botón de control: toca para saltar, mantén para agacharte, doble toque para golpear"
+                            aria-pressed="false">
+                        <span class="button-text">🎮 CONTROL</span>
+                        <div class="button-hint">
+                            <small>Tap / Hold / Double-Tap</small>
+                        </div>
+                    </button>
+
+                    <div class="gesture-indicator">
+                        <span class="indicator-idle" id="gestureIndicator">Listo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE GAME OVER -->
+    <div id="gameOverScreen" class="screen">
+        <div class="game-over-modal">
+            <div class="game-over-content">
+                <h2>🎮 JUEGO TERMINADO</h2>
+                <p class="game-over-score">
+                    Puntuación Final: <strong id="finalScore">0</strong>
+                </p>
+                <p class="game-over-distance">
+                    Distancia Recorrida: <strong id="finalDistance">0</strong>m
+                </p>
+                <button id="retryBtn" class="btn btn-primary btn-lg">
+                    🔄 Reintentar
+                </button>
+                <button id="menuBtn" class="btn btn-secondary btn-lg ms-3">
+                    🏠 Menú Principal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
